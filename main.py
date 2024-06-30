@@ -137,13 +137,13 @@ def main():
         #get response
         #get bbox
 
-        bbox = detection_result["detection"]['bboxes']
+        bbox = detection_result['bboxes']
         #draw bbox
         for i in range(len(bbox)):
             x1, y1, x2, y2 = map(int, bbox[i])  # Convert coordinates to integers
             cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
             # write the class name
-            cv2.putText(frame, detection_result["detection"]["labels"][i], (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36,255,12), 2)
+            cv2.putText(frame, detection_result["labels"][i], (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36,255,12), 2)
         #save frame with bbox
         out.write(frame)
         #display frame
