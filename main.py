@@ -51,22 +51,23 @@ def main():
 
 
     for i in range(frame_count):
+        print(f"Processing frame {i}/{frame_count}")
         #read frame
         ret, frame = cap.read()
         #send request
         encoded_string = frame_to_data_url(frame)
-        print(encoded_string[:10])
         response = requests.post("http://127.0.0.1:5000/api/object_detection", json={"image": encoded_string})
         #get response
         data = response.json()
         #get bbox
-        print(data)
+
         bbox = data["detection"]['bboxes']
         #draw bbox
-        for box in bbox:
-            x1, y1, x2, y2 = map(int, box)  # Convert coordinates to integers
-            print(x1, y1, x2, y2)
+        for i in range(len(bbox)):
+            x1, y1, x2, y2 = map(int, bbox[i])  # Convert coordinates to integers
             cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+            # write the class name
+            cv2.putText(frame, data["detection"]["labels"][i], (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36,255,12), 2)
         #save frame with bbox
         out.write(frame)
         #display frame
