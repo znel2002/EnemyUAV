@@ -45,13 +45,12 @@ def main():
         #save frame
         cv2.imwrite('frame.jpg', frame)
         #send request
-        response = requests.post(url, data={
-            "image": encode_image('frame.jpg')
-        })
+        encoded_string = encode_image(frame)
+        response = requests.post("http://127.0.0.1:5000/api/object_detection", json={"image": encoded_string})
         #get response
         data = response.json()
         #get bbox
-        bbox = data['bbox']
+        bbox = data["detection"]['bbox']
         #draw bbox
         cv2.rectangle(frame, (bbox[0], bbox[1]), (bbox[2], bbox[3]), (0, 255, 0), 2)
         #save frame with bbox
